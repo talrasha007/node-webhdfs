@@ -316,7 +316,7 @@ WebHDFSClient.prototype.open = function (path, hdfsoptions, requestoptions, call
     }, requestoptions || {});
 
     // send http request
-    return request.get(args, function (error, response, body) {
+    return request.get(args, callback && function (error, response, body) {
         
         // forward request error
         if (error) return callback(error);
@@ -464,13 +464,17 @@ WebHDFSClient.prototype.append = function (path, data, hdfsoptions, requestoptio
         
         // check for expected redirect
         if (response.statusCode == 307) {
-            
+            if (data && typeof data.pipe === 'function') {
+                data.pipe(request.post(response.headers.location));
+                return ;
+            }
+
             // format request args
             args = _.defaults({
-                
+
                 body: data,
                 uri: response.headers.location
-                
+
             }, requestoptions || {});
             
             // send http request
@@ -538,13 +542,17 @@ WebHDFSClient.prototype.create = function (path, data, hdfsoptions, requestoptio
     
     // send http request
     request.put(args, function (error, response, body) {
-                
+
         // forward request error
         if (error) return callback(error);
         
         // check for expected redirect
         if (response.statusCode == 307) {
-            
+            if (data && typeof data.pipe === 'function') {
+                data.pipe(request.put(response.headers.location));
+                return ;
+            }
+
             // generate query string
             args = _.defaults({
                 body: data,
@@ -564,7 +572,7 @@ WebHDFSClient.prototype.create = function (path, data, hdfsoptions, requestoptio
                     return callback(null, response.headers.location);
                     
                 } else {
-                    
+
                     return callback(new Error('expected http 201 created'));
                     
                 }
