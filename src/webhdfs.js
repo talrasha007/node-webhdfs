@@ -465,7 +465,9 @@ WebHDFSClient.prototype.append = function (path, data, hdfsoptions, requestoptio
         // check for expected redirect
         if (response.statusCode == 307) {
             if (data && typeof data.pipe === 'function') {
-                data.pipe(request.post(response.headers.location));
+                var stream = request.put(response.headers.location);
+                stream.on('end', function () { callback & callback(); });
+                data.pipe(stream);
                 return ;
             }
 
@@ -549,7 +551,9 @@ WebHDFSClient.prototype.create = function (path, data, hdfsoptions, requestoptio
         // check for expected redirect
         if (response.statusCode == 307) {
             if (data && typeof data.pipe === 'function') {
-                data.pipe(request.put(response.headers.location));
+                var stream = request.put(response.headers.location);
+                stream.on('end', function () { callback & callback(); });
+                data.pipe(stream);
                 return ;
             }
 
