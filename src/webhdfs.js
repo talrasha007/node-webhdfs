@@ -91,7 +91,8 @@ WebHDFSClient.prototype.listStatus = function (path, hdfsoptions, requestoptions
         json:true,
         uri: this.base_url + path,
         qs: _.defaults({
-            op: 'liststatus'
+            op: 'liststatus',
+            'user.name': this.options.user
         }, hdfsoptions || {})
     }, requestoptions || {});
     
@@ -133,7 +134,8 @@ WebHDFSClient.prototype.getFileStatus = function (path, hdfsoptions, requestopti
         json: true,
         uri: this.base_url + path,
         qs: _.defaults({
-            op: 'getfilestatus'
+            op: 'getfilestatus',
+            'user.name': this.options.user
         }, hdfsoptions || {})
     }, requestoptions || {});
     
@@ -178,7 +180,8 @@ WebHDFSClient.prototype.getContentSummary = function (path, hdfsoptions, request
         json: true,
         uri: this.base_url + path,
         qs: _.defaults({
-            op: 'getcontentsummary'
+            op: 'getcontentsummary',
+            'user.name': this.options.user
         }, hdfsoptions || {})
     }, requestoptions || {});
     
@@ -224,7 +227,8 @@ WebHDFSClient.prototype.getFileChecksum = function (path, hdfsoptions, requestop
         json: true,
         uri: this.base_url + path,
         qs: _.defaults({
-            op: 'getfilechecksum'
+            op: 'getfilechecksum',
+            'user.name': this.options.user
         }, hdfsoptions || {})
     }, requestoptions || {});
     
@@ -311,7 +315,8 @@ WebHDFSClient.prototype.open = function (path, hdfsoptions, requestoptions, call
     var args = _.defaults({
         uri: this.base_url + path,
         qs: _.defaults({
-            op: 'open'
+            op: 'open',
+            'user.name': this.options.user
         }, hdfsoptions || {})
     }, requestoptions || {});
 
